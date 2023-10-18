@@ -5,6 +5,7 @@ import br.com.uniamerica.pizzariaback.repository.EstoqueProdRep;
 import br.com.uniamerica.pizzariaback.service.EstoqueProdsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/estoqueProd")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EstoqueProdsController {
 
     @Autowired
@@ -26,7 +28,7 @@ public class EstoqueProdsController {
        return ResponseEntity.ok(estoqueProds);
    }
 
-    @GetMapping("/lista")
+    @GetMapping
     public ResponseEntity <List<EstoqueProds>> listaCompleta(){
         return ResponseEntity.ok(this.estoqueProdRep.findAll());
     }
@@ -35,7 +37,7 @@ public class EstoqueProdsController {
     public ResponseEntity <String> cadastrarEstoque(@RequestBody final EstoqueDTO estoqueDTO){
         try {
             estoqueProdsService.cadastrarNoEstoque(estoqueDTO);
-            return ResponseEntity.ok("Produto cadastrado com sucesso");
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);

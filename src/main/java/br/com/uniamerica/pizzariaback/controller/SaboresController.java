@@ -5,6 +5,7 @@ import br.com.uniamerica.pizzariaback.entity.Sabores;
 import br.com.uniamerica.pizzariaback.repository.SaboresRep;
 import br.com.uniamerica.pizzariaback.service.SaboresService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/sabores")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SaboresController {
 
    @Autowired
@@ -26,7 +28,7 @@ public class SaboresController {
         final Sabores sabores = this.saboresRep.findById(id).orElse(null);
         return ResponseEntity.ok(sabores);
     }
-    @GetMapping("/lista")
+    @GetMapping
     public ResponseEntity <List<Sabores>> listaSabores(){
         return ResponseEntity.ok(this.saboresRep.findAll());
     }
@@ -35,24 +37,19 @@ public class SaboresController {
     public ResponseEntity <String> cadastrarSabores(@RequestBody final SaboresDTO saboresDTO){
         try {
             saboresService.cadastarSabor(saboresDTO);
-            return ResponseEntity.ok("Registro cadastrado com sucesso");
-        }
+            return new ResponseEntity<>( HttpStatus.OK);        }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
             return ResponseEntity.internalServerError().body(errorMessage);
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> editaSabor(@PathVariable("id") final Long id, @RequestBody final Sabores sabores){
+    @PutMapping
+    public ResponseEntity<String> editaSabor(@RequestBody final Sabores sabores){
         try {
-            saboresService.atualizaSabor(sabores);
-            final Sabores sabores1 = this.saboresRep.findById(id).orElse(null);
+            this.saboresService.atualizaSabor(sabores);
 
-            if (sabores1 == null || !sabores1.getId().equals(sabores.getId())){
-                throw new RegistroNaoEncontradoException("Nao foi possivel indentificar o registro informado");
-            }
-            return ResponseEntity.ok("Sabor editado com Sucesso");
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
@@ -61,8 +58,8 @@ public class SaboresController {
     }
 
 
-    @DeleteMapping("/deleta/{id}")
-    public ResponseEntity<String> deletaSabor(@PathVariable("id") final Long id) {
+    @DeleteMapping
+    public ResponseEntity<String> deletaSabor(@RequestParam("id") final Long id) {
         try {
                 this.saboresService.excluirSabor(id);
                 return ResponseEntity.ok("Sabor excluído com sucesso!!");

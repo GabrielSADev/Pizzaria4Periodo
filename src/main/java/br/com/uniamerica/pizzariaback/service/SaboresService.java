@@ -32,7 +32,7 @@ public class SaboresService {
         this.saboresRep.save(sabores);
     }
 
-    public void atualizaSabor (Sabores sabores){
+    public void atualizaSabor ( Sabores sabores){
 
         this.saboresRep.save(sabores);
     }

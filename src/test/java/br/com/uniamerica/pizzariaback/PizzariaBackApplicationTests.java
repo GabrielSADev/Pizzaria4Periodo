@@ -442,13 +442,13 @@ class PizzariaBackApplicationTests {
 	@Test
 	void putSabores(){
 		Sabores sabores = new Sabores(1L,"Teste");
-		var sabor = saboresController.editaSabor(1L, sabores);
+		var sabor = saboresController.editaSabor( sabores);
 		Assertions.assertEquals("Sabor editado com Sucesso",sabor.getBody());
 	}
 	@Test
 	void putSaboresErrado(){
 		Sabores sabores = new Sabores(2L,"putErro");
-		var sabor = saboresController.editaSabor(7L,sabores);
+		var sabor = saboresController.editaSabor(sabores);
 		Assertions.assertEquals("Error: Nao foi possivel indentificar o registro informado",sabor.getBody());
 	}
 	@Test
