@@ -1,5 +1,6 @@
 package br.com.uniamerica.pizzariaback.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,9 +20,9 @@ public class Endereco extends AbstractEntity{
     @Column (name = "numeroEnd", length = 5, nullable = false)
     private int numeroEnd;
 
-    @Setter
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "usuario_id")
+    @Getter @Setter
+    @ManyToOne
+    @JsonBackReference
     private Usuario usuario;
 
     public Endereco(){

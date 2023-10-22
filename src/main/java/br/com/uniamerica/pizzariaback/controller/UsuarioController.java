@@ -4,6 +4,7 @@ import br.com.uniamerica.pizzariaback.entity.Usuario;
 import br.com.uniamerica.pizzariaback.repository.UsuarioRep;
 import br.com.uniamerica.pizzariaback.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/usuario")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UsuarioController {
 
     @Autowired
@@ -24,7 +26,7 @@ public class UsuarioController {
         final Usuario usuario = this.usuarioRep.findById(id).orElse(null);
         return ResponseEntity.ok(usuario);
     }
-    @GetMapping("/lista")
+    @GetMapping
     public ResponseEntity <List<Usuario>> listaUsers(){
         return ResponseEntity.ok(this.usuarioRep.findAll());
     }
@@ -39,7 +41,7 @@ public class UsuarioController {
     public ResponseEntity<String> cadastrarUser(@RequestBody final UsuarioDTO usuarioDTO){
         try {
             usuarioService.cadastraUsuario(usuarioDTO);
-            return ResponseEntity.ok("Usuario cadastrado com sucesso!!");
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
@@ -47,31 +49,26 @@ public class UsuarioController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> editarUsuario(@PathVariable("id") final Long id, @RequestBody final Usuario usuario){
+    @PutMapping
+    public ResponseEntity<String> editarUsuario( @RequestBody final Usuario usuario){
         try {
-            usuarioService.atualizaUsuario(usuario);
-            final Usuario usuario1 = this.usuarioRep.findById(id).orElse(null);
-            if (usuario1 == null || !usuario1.getId().equals(usuario.getId())){
-                throw new RegistroNaoEncontradoException("Nao foi possivel indentificar o usuario informado");
-            }
-            return ResponseEntity.ok("USUARIO editado com Sucesso");
-        }
+            this.usuarioService.atualizaUsuario(usuario);
+            return new ResponseEntity<>( HttpStatus.OK);        }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
             return ResponseEntity.internalServerError().body(errorMessage);
         }
     }
 
-    @DeleteMapping("/deleta/{id}")
-    public ResponseEntity<String> deletaUsuario(@PathVariable Long id) {
+    @DeleteMapping
+    public ResponseEntity<HttpStatus> deletaUsuario(@RequestParam("id") final Long id) {
         try {
             this.usuarioService.excluirUsuario(id);
-            return ResponseEntity.ok("usuario Excluido");
+            return ResponseEntity.ok(HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
-            return ResponseEntity.internalServerError().body(errorMessage);
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
         }
     }
 

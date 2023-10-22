@@ -59,13 +59,13 @@ public class SaboresController {
 
 
     @DeleteMapping
-    public ResponseEntity<String> deletaSabor(@RequestParam("id") final Long id) {
+    public ResponseEntity<HttpStatus> deletaSabor(@RequestParam("id") final Long id) {
         try {
                 this.saboresService.excluirSabor(id);
-                return ResponseEntity.ok("Sabor excluído com sucesso!!");
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
-            return ResponseEntity.internalServerError().body(errorMessage);
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
         }
     }
 

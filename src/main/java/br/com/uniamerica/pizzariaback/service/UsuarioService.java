@@ -1,5 +1,6 @@
 package br.com.uniamerica.pizzariaback.service;
 import br.com.uniamerica.pizzariaback.dto.UsuarioDTO;
+import br.com.uniamerica.pizzariaback.entity.Endereco;
 import br.com.uniamerica.pizzariaback.entity.Usuario;
 import br.com.uniamerica.pizzariaback.repository.UsuarioRep;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +26,12 @@ public class UsuarioService {
         Assert.isTrue(usuario.getNomeUsuario().length() <= 50, "Maximo de caracteres excedidos para Nome");
         Assert.isTrue(!usuario.getNomeUsuario().equals(""), "Nome nao pode ser nulo!!");
 
+        if (usuario.getEnderecos() != null){
+            for (Endereco x: usuario.getEnderecos()){
+                x.setUsuario(usuario);
+            }
+        }
+
         Usuario usuarioExist = usuarioRep.findByNomeUsuario(usuario.getNomeUsuario());
         Assert.isTrue(usuarioExist == null || usuarioExist.equals(usuario), "Este usuario já existe!!");
 
@@ -42,10 +49,7 @@ public class UsuarioService {
 
         final Usuario usuarioBanco = this.usuarioRep.findById(id).orElse(null);
 
-        if (usuarioBanco == null || !usuarioBanco.getId().equals(id)){
-            throw new RegistroNaoEncontradoException("Não foi possivel identificar o usuario informado.");
-        }
-        this.usuarioRep.save(usuarioBanco);
+        this.usuarioRep.delete(usuarioBanco);
     }
 
     public static class RegistroNaoEncontradoException extends RuntimeException {

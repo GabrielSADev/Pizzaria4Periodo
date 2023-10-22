@@ -45,35 +45,26 @@ public class EstoqueProdsController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> editarEstoque(@PathVariable("id") final Long id, @RequestBody final EstoqueProds estoqueProds){
+    @PutMapping
+    public ResponseEntity<String> editarEstoque(@RequestBody final EstoqueProds estoqueProds){
         try {
             estoqueProdsService.atualizaEstoque(estoqueProds);
-            final EstoqueProds estoqueProds1 = this.estoqueProdRep.findById(id).orElse(null);
-
-            if (estoqueProds1 == null || !estoqueProds1.getId().equals(estoqueProds.getId())){
-                throw new RegistroNaoEncontradoException("Nao foi possivel indentificar o registro informado");
-            }
-            return ResponseEntity.ok("Produto editado no estoque com Sucesso");
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (DataIntegrityViolationException e){
             return ResponseEntity.internalServerError()
                     .body("Error: " + e.getCause().getCause().getMessage());
         }
-        catch (RuntimeException e){
-            String errorMessage = getErrorMessage(e);
-            return ResponseEntity.internalServerError().body(errorMessage);
-        }
     }
 
-    @DeleteMapping("/deleta/{id}")
-    public ResponseEntity<String> deletaNoEstoque(@PathVariable("id") final Long id) {
+    @DeleteMapping
+    public ResponseEntity<HttpStatus> deletaNoEstoque(@RequestParam("id") final Long id) {
         try {
            this.estoqueProdsService.excluirProdEst(id);
-            return ResponseEntity.ok("Produto excluído com sucesso!!");
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
-            return ResponseEntity.internalServerError().body(errorMessage);
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
         }
     }
 

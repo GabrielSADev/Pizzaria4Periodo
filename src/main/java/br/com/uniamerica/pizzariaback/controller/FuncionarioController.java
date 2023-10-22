@@ -4,6 +4,7 @@ import br.com.uniamerica.pizzariaback.entity.Funcionario;
 import br.com.uniamerica.pizzariaback.repository.FuncionarioRep;
 import br.com.uniamerica.pizzariaback.service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/funcionario")
+@CrossOrigin(origins = "http://localhost:4200")
 public class FuncionarioController {
 
     @Autowired
@@ -24,7 +26,7 @@ public class FuncionarioController {
         final Funcionario funcionario = this.funcionarioRep.findById(id).orElse(null);
         return ResponseEntity.ok(funcionario);
     }
-    @GetMapping("/lista")
+    @GetMapping
     public ResponseEntity <List<Funcionario>> listaFuncionarios(){
         return ResponseEntity.ok(this.funcionarioRep.findAll());
     }
@@ -34,24 +36,20 @@ public class FuncionarioController {
     public ResponseEntity <String> cadastrarFuncionario(@RequestBody final FuncionarioDTO funcionarioDTO){
         try {
             funcionarioService.cadastrarFuncionario(funcionarioDTO);
-            return ResponseEntity.ok("Registro cadastrado com sucesso");
-        }
+            return new ResponseEntity<>( HttpStatus.OK);
+    }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
             return ResponseEntity.internalServerError().body(errorMessage);
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> editaFunc(@PathVariable ("id") final Long id, @RequestBody final FuncionarioDTO funcionarioDTO){
+    @PutMapping
+    public ResponseEntity<String> editaFunc(@RequestBody final FuncionarioDTO funcionarioDTO){
         try {
-            final Funcionario funcionario1 = this.funcionarioRep.findById(id).orElse(null);
-
-            if (funcionario1 == null || !funcionario1.getId().equals(funcionarioDTO.getId())){
-                return ResponseEntity.internalServerError().body("Nao foi possivel indentificar o registro informado");
-            }
             this.funcionarioService.atualizaFuncionario(funcionarioDTO);
-            return ResponseEntity.ok("Registro EDITADO com Sucesso");
+
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
@@ -59,16 +57,16 @@ public class FuncionarioController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletaFuncionario(@PathVariable Long id) {
+    @DeleteMapping
+    public ResponseEntity<HttpStatus> deletaFuncionario(@RequestParam("id") final Long id) {
         try {
 
             this.funcionarioService.excluirFuncionario(id);
-            return ResponseEntity.ok("Funcionário excluído");
+            return ResponseEntity.ok(HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
-            return ResponseEntity.internalServerError().body(errorMessage);
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
         }
     }
 

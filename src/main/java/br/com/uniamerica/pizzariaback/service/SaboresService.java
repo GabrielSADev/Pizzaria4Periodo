@@ -42,9 +42,6 @@ public class SaboresService {
 
         final Sabores saboresBanco = this.saboresRep.findById(id).orElse(null);
 
-        if (saboresBanco == null || !saboresBanco.getId().equals(id)){
-            throw new RegistroNaoEncontradoException("Não foi possivel identificar o sabor informado.");
-        }
         this.saboresRep.delete(saboresBanco);
     }
 

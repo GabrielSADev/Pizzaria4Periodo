@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -205,13 +206,13 @@ class PizzariaBackApplicationTests {
 	@Test
 	void testPUTusuario(){
 		Usuario usuario = new Usuario(1L,"nome","999999999");
-		var editaUser = usuarioController.editarUsuario(1L, usuario);
+		var editaUser = usuarioController.editarUsuario( usuario);
 		Assertions.assertEquals("USUARIO editado com Sucesso",editaUser.getBody());
 	}
 	@Test
 	void testPUTerradoUSuario(){
 		Usuario usuario = new Usuario(1L,"nome","999999999");
-		var editaUser = usuarioController.editarUsuario(7L, usuario);
+		var editaUser = usuarioController.editarUsuario( usuario);
 		Assertions.assertEquals("Error: Nao foi possivel indentificar o usuario informado",editaUser.getBody());
 
 	}
@@ -225,7 +226,7 @@ class PizzariaBackApplicationTests {
 
 	@Test
 	void testExcluirUsuarioInexistente(){
-		ResponseEntity<String> responseEntity = usuarioController.deletaUsuario(999L);
+		ResponseEntity<HttpStatus> responseEntity = usuarioController.deletaUsuario(999L);
 		Assertions.assertEquals("Error: Não foi possivel identificar o usuario informado.", responseEntity.getBody());
 
 
@@ -278,7 +279,7 @@ class PizzariaBackApplicationTests {
 		EnderecoDTO enderecoDTO = new EnderecoDTO("RuaPUT", "BairroPUT", 666, usuarioTestPut);
 		enderecoDTO.setId(1L);
 
-		var endereco = enderecoController.editaEnd(1L, enderecoDTO);
+		var endereco = enderecoController.editaEnd( enderecoDTO);
 		Assertions.assertEquals("Registro EDITADO com sucesso!!", endereco.getBody());
 	}
 	@Test
@@ -287,7 +288,7 @@ class PizzariaBackApplicationTests {
 		EnderecoDTO enderecoDTO = new EnderecoDTO("RuaPUT", "BairroPUT", 666, usuarioTestPut);
 		enderecoDTO.setId(1L);
 
-		var endereco = enderecoController.editaEnd(10L, enderecoDTO);
+		var endereco = enderecoController.editaEnd( enderecoDTO);
 		Assertions.assertEquals("Nao foi possivel indentificar o endereco informado",endereco.getBody());
 	}
 	@Test
@@ -335,7 +336,7 @@ class PizzariaBackApplicationTests {
 		FuncionarioDTO funcionarioDTO = new FuncionarioDTO("FuncionarioPUT");
 		funcionarioDTO.setId(1L);
 
-		var funcionario = funcionarioController.editaFunc(1L, funcionarioDTO);
+		var funcionario = funcionarioController.editaFunc( funcionarioDTO);
 		Assertions.assertEquals("Registro EDITADO com Sucesso", funcionario.getBody());
 	}
 	@Test
@@ -343,7 +344,7 @@ class PizzariaBackApplicationTests {
 		FuncionarioDTO funcionarioDTO = new FuncionarioDTO("FuncionarioPUT");
 		funcionarioDTO.setId(1L);
 
-		var funcionario = funcionarioController.editaFunc(10L, funcionarioDTO);
+		var funcionario = funcionarioController.editaFunc( funcionarioDTO);
 		Assertions.assertEquals("Nao foi possivel indentificar o registro informado", funcionario.getBody());
 	}
 
@@ -389,13 +390,13 @@ class PizzariaBackApplicationTests {
 	@Test
 	void testPUTestoque(){
 		EstoqueProds estoqueProds = new EstoqueProds(1L, 20,"DeuCerto");
-		var estoque = estoqueProdsController.editarEstoque(1L,estoqueProds);
+		var estoque = estoqueProdsController.editarEstoque(estoqueProds);
 		Assertions.assertEquals("Produto editado no estoque com Sucesso",estoque.getBody());
 	}
 	@Test
 	void testPUTestoqueErrado(){
 		EstoqueProds estoqueProds = new EstoqueProds(1L, 20,"DeuCerto");
-		var estoque = estoqueProdsController.editarEstoque(10L,estoqueProds);
+		var estoque = estoqueProdsController.editarEstoque(estoqueProds);
 		Assertions.assertEquals("Error: Nao foi possivel indentificar o registro informado",estoque.getBody());
 	}
 	@Test
