@@ -541,14 +541,14 @@ class PizzariaBackApplicationTests {
 	void testPUTpizza(){
 		PizzaDTO pizzaDTO = new PizzaDTO(saboresList,55,1,Tamanho.GG);
 		pizzaDTO.setId(1L);
-		var pizza = pizzaController.editaPizza(1L, pizzaDTO);
+		var pizza = pizzaController.editaPizza( pizzaDTO);
 		Assertions.assertEquals("pizza EDITADA com Sucesso", pizza.getBody());
 	}
 	@Test
 	void testPUTpizzaErrado(){
 		PizzaDTO pizzaDTO = new PizzaDTO(saboresList,55,1,Tamanho.GG);
 		pizzaDTO.setId(1L);
-		var pizza = pizzaController.editaPizza(5L, pizzaDTO);
+		var pizza = pizzaController.editaPizza(pizzaDTO);
 		Assertions.assertEquals("Nao foi possivel indentificar a pizza informado", pizza.getBody());
 	}
 

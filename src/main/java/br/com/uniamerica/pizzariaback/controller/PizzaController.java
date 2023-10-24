@@ -5,6 +5,7 @@ import br.com.uniamerica.pizzariaback.entity.Pizza;
 import br.com.uniamerica.pizzariaback.repository.PizzaRep;
 import br.com.uniamerica.pizzariaback.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/pizza")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PizzaController {
 
     @Autowired
@@ -26,7 +28,7 @@ public class PizzaController {
         return ResponseEntity.ok(pizza);
     }
 
-    @GetMapping("/lista")
+    @GetMapping
     public ResponseEntity <List<Pizza>> listaCompleta(){
         return ResponseEntity.ok(this.pizzaRep.findAll());
     }
@@ -35,7 +37,7 @@ public class PizzaController {
     public ResponseEntity<String> cadastrar (@RequestBody final PizzaDTO pizzaDTO){
     try {
         pizzaService.cadastrarPizza(pizzaDTO);
-        return ResponseEntity.ok("Pizza cadastrada com sucesso");
+        return new ResponseEntity<>( HttpStatus.OK);
     }
     catch (RuntimeException e){
         String errorMessage = getErrorMessage(e);
@@ -43,16 +45,11 @@ public class PizzaController {
     }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> editaPizza(@PathVariable("id") final Long id, @RequestBody final PizzaDTO pizzaDTO){
+    @PutMapping
+    public ResponseEntity<String> editaPizza(@RequestBody final PizzaDTO pizzaDTO){
         try {
-            final Pizza pizza1 = this.pizzaRep.findById(id).orElse(null);
-
-            if (pizza1 == null || !pizza1.getId().equals(pizzaDTO.getId())){
-                return ResponseEntity.internalServerError().body("Nao foi possivel indentificar a pizza informado");
-            }
-          this.pizzaService.atualizPizza(pizzaDTO);
-            return ResponseEntity.ok("pizza EDITADA com Sucesso");
+        this.pizzaService.atualizPizza(pizzaDTO);
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
