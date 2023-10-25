@@ -598,7 +598,7 @@ class PizzariaBackApplicationTests {
 		EstoqueProds estoqueProds = new EstoqueProds(5L,55,"NemSei");
 		ProdutosDTO produtosDTO =new ProdutosDTO(10,20,estoqueProds);
 		produtosDTO.setId(1L);
-		var produto = produtosController.edita(1L, produtosDTO);
+		var produto = produtosController.edita( produtosDTO);
 		Assertions.assertEquals("Produto Editado com Sucesso",produto.getBody());
 	}
 	@Test
@@ -606,7 +606,7 @@ class PizzariaBackApplicationTests {
 		EstoqueProds estoqueProds = new EstoqueProds(5L,55,"NemSei");
 		ProdutosDTO produtosDTO =new ProdutosDTO(10,20,estoqueProds);
 		produtosDTO.setId(1L);
-		var produto = produtosController.edita(6L, produtosDTO);
+		var produto = produtosController.edita( produtosDTO);
 		Assertions.assertEquals("Nao foi possivel indentificar o registro informado",produto.getBody());
 	}
 

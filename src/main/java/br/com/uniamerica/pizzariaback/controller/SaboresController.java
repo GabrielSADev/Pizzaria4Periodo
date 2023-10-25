@@ -37,7 +37,8 @@ public class SaboresController {
     public ResponseEntity <String> cadastrarSabores(@RequestBody final SaboresDTO saboresDTO){
         try {
             saboresService.cadastarSabor(saboresDTO);
-            return new ResponseEntity<>( HttpStatus.OK);        }
+            return new ResponseEntity<>( HttpStatus.OK);
+        }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
             return ResponseEntity.internalServerError().body(errorMessage);

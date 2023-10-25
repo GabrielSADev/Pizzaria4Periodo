@@ -15,6 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/pedido")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PedidoController {
 
     @Autowired
@@ -27,7 +28,7 @@ public class PedidoController {
         final Pedido pedido = this.pedidoRep.findById(id).orElse(null);
         return ResponseEntity.ok(pedido);
     }
-    @GetMapping("/lista")
+    @GetMapping
     public ResponseEntity <List<Pedido>> listaPedidos(){
         return ResponseEntity.ok(this.pedidoRep.findAll());
     }

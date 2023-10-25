@@ -4,6 +4,7 @@ import br.com.uniamerica.pizzariaback.entity.Produtos;
 import br.com.uniamerica.pizzariaback.repository.ProdutosRep;
 import br.com.uniamerica.pizzariaback.service.ProdutosService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/produtos")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProdutosController {
 
     @Autowired
@@ -24,7 +26,7 @@ public class ProdutosController {
         final Produtos produtos = this.produtosRep.findById(id).orElse(null);
         return ResponseEntity.ok(produtos);
     }
-    @GetMapping("/lista")
+    @GetMapping
     public ResponseEntity <List<Produtos>> listaProdutos(){
         return ResponseEntity.ok(this.produtosRep.findAll());
     }
@@ -33,7 +35,7 @@ public class ProdutosController {
     public ResponseEntity <String> cadastrarProdutos(@RequestBody final ProdutosDTO produtosDTO){
         try {
            produtosService.cadastrarProduto(produtosDTO);
-            return ResponseEntity.ok("Produto feito com sucesso");
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
@@ -41,16 +43,12 @@ public class ProdutosController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> edita(@PathVariable("id") final Long id, @RequestBody final ProdutosDTO produtosDTO){
+    @PutMapping
+    public ResponseEntity<String> edita( @RequestBody final ProdutosDTO produtosDTO){
         try {
-            final Produtos produto1 = this.produtosRep.findById(id).orElse(null);
 
-            if (produto1 == null || !produto1.getId().equals(produtosDTO.getId())){
-                return ResponseEntity.internalServerError().body("Nao foi possivel indentificar o registro informado");
-            }
             this.produtosService.atualizaProduto(produtosDTO);
-            return ResponseEntity.ok("Produto Editado com Sucesso");
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);

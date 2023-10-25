@@ -8,7 +8,6 @@ public class ProdutosDTO extends AbstractDTO{
     private int quantidadeprod;
     private float totalprod;
     private EstoqueProds estoqueProds;
-
     public ProdutosDTO(){
 
     }
