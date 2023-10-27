@@ -17,7 +17,7 @@ public class PizzaService {
     private PizzaRep pizzaRep;
 
     @Transactional(rollbackFor = Exception.class)
-    public void cadastrarPizza(final PizzaDTO pizzaDTO){
+    public PizzaDTO cadastrarPizza(final PizzaDTO pizzaDTO){
         var pizza = new Pizza();
         BeanUtils.copyProperties(pizzaDTO,pizza);
 
@@ -50,7 +50,10 @@ public class PizzaService {
         total = pizza.getPrecoPizza() * pizza.getQuantidadePizza();
         pizza.setPrecoPizza(total);
 
-        this.pizzaRep.save(pizza);
+        Pizza pizzaSalva = this.pizzaRep.save(pizza);
+        PizzaDTO pizzaDTO2 = new PizzaDTO();
+        BeanUtils.copyProperties(pizzaSalva, pizzaDTO2);
+        return pizzaDTO2;
     }
 
 

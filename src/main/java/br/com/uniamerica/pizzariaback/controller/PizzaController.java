@@ -34,15 +34,14 @@ public class PizzaController {
     }
 
     @PostMapping
-    public ResponseEntity<String> cadastrar (@RequestBody final PizzaDTO pizzaDTO){
+    public PizzaDTO cadastrar (@RequestBody final PizzaDTO pizzaDTO){
     try {
-        pizzaService.cadastrarPizza(pizzaDTO);
-        return new ResponseEntity<>( HttpStatus.OK);
+        return this.pizzaService.cadastrarPizza(pizzaDTO);
     }
     catch (RuntimeException e){
         String errorMessage = getErrorMessage(e);
-        return ResponseEntity.internalServerError().body(errorMessage);
-    }
+        return null;
+        }
     }
 
     @PutMapping

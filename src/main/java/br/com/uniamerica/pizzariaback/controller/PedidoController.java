@@ -5,7 +5,9 @@ import br.com.uniamerica.pizzariaback.entity.Status;
 import br.com.uniamerica.pizzariaback.repository.PedidoRep;
 import br.com.uniamerica.pizzariaback.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
@@ -85,27 +87,22 @@ public class PedidoController {
 
 
     @PostMapping
-    public ResponseEntity <String> cadastrarPedido(@RequestBody final PedidoDTO pedidoDTO){
+    public ResponseEntity <HttpStatus> cadastrarPedido( @RequestBody final PedidoDTO pedidoDTO){
         try {
             this.pedidoService.cadastraPedido(pedidoDTO);
-            return ResponseEntity.ok("Pedido cadastrado com sucesso!!");
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
-            return ResponseEntity.internalServerError().body(errorMessage);
+            return new ResponseEntity<> (null, HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> editaPedido(@PathVariable("id") final Long id, @RequestBody final PedidoDTO pedidoDTO){
         try {
-            final Pedido pedido1 = this.pedidoRep.findById(id).orElse(null);
-
-            if (pedido1 == null || !pedido1.getId().equals(pedidoDTO.getId())){
-                return ResponseEntity.internalServerError().body("Nao foi possivel indentificar o pedido informado");
-            }
             this.pedidoService.atualizaPedido(pedidoDTO);
-            return ResponseEntity.ok("Pedido EDITADO com sucesso!!");
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
@@ -130,15 +127,15 @@ public class PedidoController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletaPedido(@PathVariable Long id){
+    @DeleteMapping
+    public ResponseEntity<HttpStatus> deletaPedido(@RequestParam("id") Long id){
         try {
             this.pedidoService.excluirPedido(id);
-            return ResponseEntity.ok("Pedido Excluido com sucesso!!");
+            return new ResponseEntity<>( HttpStatus.OK);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
-            return ResponseEntity.internalServerError().body(errorMessage);
+            return new ResponseEntity<> (null, HttpStatus.BAD_REQUEST);
         }
     }
 

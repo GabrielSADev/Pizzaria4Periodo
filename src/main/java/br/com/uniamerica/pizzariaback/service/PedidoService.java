@@ -29,8 +29,7 @@ public class PedidoService {
 
     @Transactional(rollbackFor = Exception.class)
     public void cadastraPedido(final PedidoDTO pedidoDTO){
-        float total = 0;
-        float totalProdutos = 0;
+
         var pedido = new Pedido();
         BeanUtils.copyProperties(pedidoDTO,pedido);
 
@@ -40,6 +39,9 @@ public class PedidoService {
             pedido.setPagamentoCartao(false);
         }
 
+        float total = 0;
+        float totalProdutos = 0;
+
         if (pedido.getPizzas() != null && !pedido.getPizzas().isEmpty()) {
             for (Pizza pizza : pedido.getPizzas()) {
 
@@ -47,7 +49,6 @@ public class PedidoService {
                 total += pizzaTemp.get().getPrecoPizza();
             }
         }
-
         if (pedido.getProdutos() != null && !pedido.getProdutos().isEmpty()){
             for (Produtos produtos: pedido.getProdutos()){
 
@@ -55,13 +56,9 @@ public class PedidoService {
                 total += produtoTemp.get().getTotalprod();
             }
         }
-
         pedido.setPedidopreco(total+totalProdutos);
-
         pedido.setStatus(Status.ATIVO);
-
         this.pedidoRep.save(pedido);
-
     }
 
     @Transactional(rollbackFor = Exception.class)

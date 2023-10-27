@@ -32,14 +32,13 @@ public class ProdutosController {
     }
 
     @PostMapping
-    public ResponseEntity <String> cadastrarProdutos(@RequestBody final ProdutosDTO produtosDTO){
+    public ProdutosDTO cadastrarProdutos(@RequestBody final ProdutosDTO produtosDTO){
         try {
-           produtosService.cadastrarProduto(produtosDTO);
-            return new ResponseEntity<>( HttpStatus.OK);
+           return this.produtosService.cadastrarProduto(produtosDTO);
         }
         catch (RuntimeException e){
             String errorMessage = getErrorMessage(e);
-            return ResponseEntity.internalServerError().body(errorMessage);
+            return null;
         }
     }
 

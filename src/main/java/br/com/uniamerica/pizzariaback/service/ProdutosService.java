@@ -22,14 +22,14 @@ public class ProdutosService {
     private EstoqueProdRep estoqueProdRep;
 
     @Transactional(rollbackFor = Exception.class)
-    public void cadastrarProduto (final ProdutosDTO produtosDTO){
-
-        float total = 0;
+    public ProdutosDTO cadastrarProduto (final ProdutosDTO produtosDTO){
         var produtos = new Produtos();
         BeanUtils.copyProperties(produtosDTO,produtos);
 
         Assert.isTrue(produtos.getQuantidadeprod() != 0, "A quantidade do produto não pode ser nula!!");
         Assert.isTrue(produtos.getEstoqueProds() != null, "O Produto não pode ser nulo!!");
+
+        float total = 0;
 
         EstoqueProds estoqueProds = produtos.getEstoqueProds();
         Optional <EstoqueProds> estoqueTemp = estoqueProdRep.findById(estoqueProds.getId());
@@ -37,7 +37,10 @@ public class ProdutosService {
 
         produtos.setTotalprod(total);
 
-        this.produtosRep.save(produtos);
+        Produtos produtosSalvo = this.produtosRep.save(produtos);
+        ProdutosDTO produtosDTO2 = new ProdutosDTO();
+        BeanUtils.copyProperties(produtosSalvo, produtosDTO2);
+        return produtosDTO2;
     }
 
     @Transactional(rollbackFor = Exception.class)
