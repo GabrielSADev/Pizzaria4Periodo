@@ -1,36 +1,63 @@
 package br.com.uniamerica.pizzariaback.service;
+import br.com.uniamerica.pizzariaback.config.JwtServiceGenerator;
 import br.com.uniamerica.pizzariaback.dto.LoginDTO;
+import br.com.uniamerica.pizzariaback.dto.UsuarioDTO;
 import br.com.uniamerica.pizzariaback.entity.Login;
-import br.com.uniamerica.pizzariaback.repository.LoginRep;
+import br.com.uniamerica.pizzariaback.entity.Usuario;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 @Service
 public class LoginService {
+/*
 
     @Autowired
-    private LoginRep loginRep;
+    private JwtServiceGenerator jwtService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Transactional(rollbackFor = Exception.class)
-    public void cadastraLogin(final LoginDTO loginDTO){
-        var login = new Login();
-        BeanUtils.copyProperties(loginDTO,login);
+    public LoginDTO cadastraLogin(final LoginDTO loginDTO){
 
-        Assert.isTrue(login.getNomeLogin().length() <= 30, "Maximo de caracteres alcançados");
-        Assert.isTrue(login.getSenhaLogin().length() <= 20, "Maximo de caracteres na senha alcançados");
+//        var login = new Login();
+//        BeanUtils.copyProperties(loginDTO,login);
+//
+//        Assert.isTrue(login.getNomeLogin().length() <= 30, "Maximo de caracteres alcançados");
+//        Assert.isTrue(login.getSenhaLogin().length() <= 20, "Maximo de caracteres na senha alcançados");
+//
+//        Assert.isTrue(!login.getNomeLogin().equals(""), "O nome do login não pode ser nulo");
+//        Assert.isTrue(!login.getSenhaLogin().equals(""),"A senha nao pode ser nula!!");
 
-        Assert.isTrue(!login.getNomeLogin().equals(""), "O nome do login não pode ser nulo");
-        Assert.isTrue(!login.getSenhaLogin().equals(""),"A senha nao pode ser nula!!");
+//        Login loginExist = loginRep.findBynomeLogin(login.getNomeLogin());
+//        Assert.isTrue(loginExist == null || loginExist.equals(login), "Login já existente!!");
 
-        Login loginExist = loginRep.findByNomeLogin(login.getNomeLogin());
-        Assert.isTrue(loginExist == null || loginExist.equals(login), "Login já existente!!");
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDTO.getNomeLogin(),
+                        loginDTO.getSenhaLogin()
+                )
+        );
+        Login user = loginRep.findBynomeLogin(loginDTO.getNomeLogin()).orElseThrow();
+        var jwtToken = jwtService.generateToken(user);
 
-        this.loginRep.save(login);
+        return toUserDTO(user, jwtToken);
     }
 
+
+
+    private LoginDTO toUserDTO(Login user, String token) {
+        LoginDTO userDTO = new LoginDTO();
+        userDTO.setId(user.getId());
+        userDTO.setRole(user.getRole());
+        userDTO.setToken(token);
+        userDTO.setNomeLogin(user.getNomeLogin());
+        return userDTO;
+    }
     @Transactional(rollbackFor = Exception.class)
     public void atualizaLogin(Login login){
 
@@ -56,5 +83,7 @@ public class LoginService {
             super(message);
         }
     }
+
+ */
 
 }

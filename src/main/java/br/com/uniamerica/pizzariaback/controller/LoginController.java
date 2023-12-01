@@ -1,7 +1,6 @@
 package br.com.uniamerica.pizzariaback.controller;
 import br.com.uniamerica.pizzariaback.dto.LoginDTO;
 import br.com.uniamerica.pizzariaback.entity.Login;
-import br.com.uniamerica.pizzariaback.repository.LoginRep;
 import br.com.uniamerica.pizzariaback.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/login")
+@RequestMapping(value = "/login")
+@CrossOrigin(origins = "http://localhost:4200")
 public class LoginController {
-
-    @Autowired
-    private LoginRep loginRep;
+/*
 
     @Autowired
     private LoginService loginService;
@@ -82,4 +80,6 @@ public class LoginController {
         }
 
     }
+
+ */
 }

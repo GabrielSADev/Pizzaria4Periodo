@@ -1,9 +1,9 @@
 package br.com.uniamerica.pizzariaback.repository;
 
 import br.com.uniamerica.pizzariaback.entity.Login;
+import br.com.uniamerica.pizzariaback.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LoginRep extends JpaRepository<Login, Long> {
+import java.util.Optional;
 
-    Login findByNomeLogin(String nomeLogin);
-}
+

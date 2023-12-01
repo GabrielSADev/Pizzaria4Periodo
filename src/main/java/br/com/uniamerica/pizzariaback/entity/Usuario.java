@@ -26,7 +26,7 @@ public class Usuario extends AbstractEntity{
 
     public Usuario(){}
 
-    public Usuario(Long id,String nomeUsuario, String telefone) {
+    public Usuario(Long id,String nomeUsuario, String telefone, String role) {
         this.id = id;
         this.nomeUsuario = nomeUsuario;
         this.telefone = telefone;
